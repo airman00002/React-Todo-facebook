@@ -1,22 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import Input from "./Input";
+import Navbar from "./Navbar";
+import Post from "./Post";
+
+let id = 1;
 
 function App() {
+  const [posts, setPosts] = useState([]);
+
+  //*Add Post
+  const addPosts = (title) => {
+    const newPosts = { id, title };
+    setPosts([newPosts, ...posts]);
+    id += 1;
+  };
+  //*Delete Post
+  const deletePosts = (id) => {
+    const afterDelete = posts.filter(post => post.id !== id)
+    setPosts(afterDelete)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Navbar />
+        <Input addPosts={addPosts} />
+        {posts.map((post) => (
+          <Post  key={post.id} id={post.id} title={post.title} deletePosts={deletePosts}  />
+        ))}
       </header>
     </div>
   );
